@@ -1,0 +1,8 @@
+#File of includes for a bash script file.
+#$(dirname $0), becuse you can execute the main code from other plce that is not the main code folder.
+#In this case, we are including that sources using the main code file path.
+#! You can't include that sources from other directory directly from shell.
+. $(dirname $0)/Includes/colores.sh
+. $(dirname $0)/Includes/verificationFunctions.sh
+. $(dirname $0)/Includes/progresiveBar.sh
+. $(dirname $0)/Includes/utiles.sh
