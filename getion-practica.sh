@@ -85,14 +85,35 @@ then
 fi 
 
 nameOfTarball="$subjectName-$(date +%x | tr -d '\')-$(date +%X | tr -d ':')"
-tar -czf "$nameOfTarball.tgz" $dirPrac
+tar -czf "$nameOfTarball.tgz" $dirPrac #In order to not have too much files in main directory, 
+				       # that tarballs will be in a Packet folder.
 
 }
 function option3
 {
+declare -a students
+MmsjC 7 0 "Menú 3 – Obtener tamaño y fecha del fichero\n\n"
+read -p "Asignatura sobre la que queremos información: " subjectName
+makePacketDirectory
+
+tgzFile=""
+getSuvbjectfileName $subjectName
+declare -a datos=$(du ./Packet/$tgzFile -b)
+pesoPaquete=${datos[0]}
+
+echo "
+El fichero generado es $tgzFile y ocupa $pesoPaquete bytes."
 }
 function option4
 {
+Asignatura cuyo backup queremos enviar:
+
+MmsjC 7 0 "Menú 4 – Enviar backup al servidor\n\n"
+Aread -p "signatura cuyo backup queremos enviar:" subjectName
+tgzFile=""
+getSuvbjectfileName $subjectName
+declare -a datos=$(du ./Packet/$tgzFile -b)
+
 }
 function option5
 {
@@ -190,6 +211,25 @@ function getStudentsPathDir
 		$0
 		return $?
 	fi
+}
+function makePacketDirectory
+{
+	if [ -d "./Packages" ]
+	then 
+		return 0
+	else
+		mkdir "./Packet"
+		msjC 4 0 "Se ha creado un nuevo directorio ./Packet\n"
+		Log $(msjC 4 0 "[INFO] Se ha creado un nuevo directorio ./Packet\n")
+	fi
+}
+function getSuvbjectfileName
+{
+packetdir="./Packet"
+subjectName=$1
+ficheros=$(ls ${packetdir}/${subjectName} | egrep "${subjectName}-"[0-9]\{6\}"-"[0-9]\{4\})".tgz"
+declare -a students=($(echo $ficheros))
+tgzFile="${packetdir}/${students[0]}"
 }
 function Log
 {
