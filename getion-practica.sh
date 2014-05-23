@@ -106,13 +106,12 @@ El fichero generado es $tgzFile y ocupa $pesoPaquete bytes."
 }
 function option4
 {
-Asignatura cuyo backup queremos enviar:
-
 MmsjC 7 0 "Menú 4 – Enviar backup al servidor\n\n"
-Aread -p "signatura cuyo backup queremos enviar:" subjectName
+read -p "Asignatura cuyo backup queremos enviar:" subjectName
 tgzFile=""
 getSuvbjectfileName $subjectName
-declare -a datos=$(du ./Packet/$tgzFile -b)
+#Comprovar si existe el fichero.
+Servidor al que desea enviar backup (dominio por omisióna: eui.upm.es):
 
 }
 function option5
