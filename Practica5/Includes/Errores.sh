@@ -27,4 +27,4 @@ function Warn_gen
 #Code:
 
 #Is empty.
-echo "2"
+
