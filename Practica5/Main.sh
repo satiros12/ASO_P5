@@ -4,6 +4,7 @@
 . $(dirname $0)/Includes/Errores.sh #Funciónes de control de errores.
 . $(dirname $0)/Includes/Controles.sh #Funciones de control de correcto funcionamiento del script.
 . $(dirname $0)/Includes/Fuentes.sh #Funciónes con fuentes gréficas varias.
+. $(dirname $0)/Includes/Log.sh #Funciónes para enviar mensajes al archivo de log.
 #Declares of variables:
 Seleccion="" # Valriable de datos introducidos.
 Seguir="NO"
@@ -32,8 +33,9 @@ do
 	Fuentes_pregunta "  Opción: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion
 	Fuentes_respuesta_color_end
-	if [ Controles_opcion_menu_correcto $Seleccion ]
+	if [ Controles_opcion_menu_correcto $Seleccion ] #comprueba si la selección está entre 1 y 5.
         then
 		Seguir= "SI"
 	else
@@ -54,6 +56,7 @@ echo ""
 Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: "
 Fuentes_respuesta_color_start
 read Seleccion
+Log_info $Seleccion
 Fuentes_respuesta_color_end
 
 Asignatura=$Seleccion
@@ -63,6 +66,7 @@ do
 	Fuentes_pregunta "Hora a la que debe realizarse la recogida: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion	
 	Fuentes_respuesta_color_end
 	if [ Controles_hora_correcta $Seleccion ]
         then
@@ -81,6 +85,7 @@ do
 	Fuentes_pregunta "Ruta absoluta con las cuentas de los alumnos: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion
 	Fuentes_respuesta_color_end
 	if [ Controles_directorio_correcto $Seleccion ]
         then
@@ -99,6 +104,7 @@ do
 	Fuentes_pregunta "Ruta absoluta para almacenar prácticas: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion
 	Fuentes_respuesta_color_end
 	if [ Controles_directorio_correcto $Seleccion ]
         then
@@ -122,6 +128,7 @@ do
 	Fuentes_pregunta "¿Está de acuerdo (s/n)? "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion
 	Fuentes_respuesta_color_end
 	if [ Controles_confiramcion_correcta $Seleccion ]
         then
@@ -134,7 +141,7 @@ done
 
 if [ $Seleccion = "n" ] 
 then
-	warn_cancel "-- Datos rechazados --"
+	Warn_cancel "-- Datos rechazados --"
 	#echo "-- Datos rechazados --"
 	return 0;
 fi
@@ -172,6 +179,7 @@ echo ""
 Fuentes_pregunta "Asignatura cuyas prácticas se desea empaquetar: "
 Fuentes_respuesta_color_start
 read Seleccion
+Log_info $Seleccion
 Fuentes_respuesta_color_end
 
 Asignatura=$Seleccion
@@ -181,6 +189,7 @@ do
 	Fuentes_pregunta "Ruta absoluta para almacenar prácticas: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion	
 	Fuentes_respuesta_color_end
 	if [ Controles_directorio_correcto $Seleccion ]
         then
@@ -204,6 +213,7 @@ do
 	Fuentes_pregunta "¿Está de acuerdo (s/n)? "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion	
 	Fuentes_respuesta_color_end
 	if [ Controles_confiramcion_correcta $Seleccion ]
         then
@@ -217,11 +227,11 @@ done
 if [ $Seleccion = "n" ] 
 then
 	#echo "-- Datos rechazados --"
-	warn_cancel "-- Datos rechazados --"	
+	Warn_cancel "-- Datos rechazados --"	
 	return 0;
 fi
 
-$(dirname $0)/Modulos/Empaquetar.sh $RutaPracticas
+$(dirname $0)/Modulos/Empaquetar.sh $RutaPracticas $Asignatura
 
 echo "-- Completado --"
 
@@ -238,6 +248,7 @@ echo ""
 Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: "
 Fuentes_respuesta_color_start
 read Seleccion
+Log_info $Seleccion
 Fuentes_respuesta_color_end
 
 Asignatura=$Seleccion
@@ -247,6 +258,7 @@ do
 	Fuentes_pregunta "Ruta absoluta de la asignatura: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion	
 	Fuentes_respuesta_color_end
 	if [ Controles_directorio_correcto $Seleccion ]
         then
@@ -260,13 +272,13 @@ done
 RutaPracticas=$Seleccion
 Seguir= "NO"
 
-SalidaInfo=$($(dirname $0)/Modulos/InfoPaquete.sh)
+SalidaInfo=$($(dirname $0)/Modulos/InfoPaquete.sh "$RutaPracticas")
 
 if [ $SalidaInfo != "Nada" ]
 then
 	Fuentes_menu "$SalidaInfo"
 else
-	Fuentes_noPaquete "No hay paquetes en éste direcotio."	
+	Warn_gen "No hay paquetes en éste direcotio."	
 fi
 
 }
@@ -280,6 +292,7 @@ echo ""
 Fuentes_pregunta "Asignatura cuyo backup queremos enviar: "
 Fuentes_respuesta_color_start
 read Seleccion
+Log_info $Seleccion
 Fuentes_respuesta_color_end
 
 Asignatura=$Seleccion
@@ -289,6 +302,7 @@ do
 	Fuentes_pregunta "Ruta absoluta de la asignatura: "
 	Fuentes_respuesta_color_start
 	read Seleccion
+	Log_info $Seleccion	
 	Fuentes_respuesta_color_end
 	if [ Controles_directorio_correcto $Seleccion ]
         then
@@ -302,9 +316,11 @@ done
 RutaPracticas=$Seleccion
 Seguir= "NO"
 
-Fuentes_pregunta "Asignatura cuyo backup queremos enviar: "
+Fuentes_pregunta "Servidor al que desea enviar backup (dominio por omisión:
+eui.upm.es): "
 Fuentes_respuesta_color_start
 read Seleccion
+Log_info $Seleccion
 Fuentes_respuesta_color_end
 
 DireccionServidor=$Seleccion

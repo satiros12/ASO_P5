@@ -3,7 +3,7 @@
 #	$2: Directory where script puts practices.
 
 #----------Includes-------------
-. $(dirname $0)/Includes/verificationFunctions.sh
+
 #----------Declarations---------
 #---Variables---
 getPath=$1
@@ -12,7 +12,7 @@ declare -a students
 #---Functions---
 #---Code----
 #Checking paramenters and data
-if ! numParam $# "2"
+if [ "$#" -lt "2" ]
 then
 	exit 1
 fi
