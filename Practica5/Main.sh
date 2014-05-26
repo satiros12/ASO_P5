@@ -15,36 +15,34 @@ function menuInicial
 Fuentes_titulo "ASO 13/14 – Práctica 5"
 Fuentes_nomberAlumno "Stanislav Vakaruk"
 echo ""
-Fuentes_menu "
-Herramienta de gestión de prácticas
------------------------------------
-"
+Fuentes_menu "Herramienta de gestión de prácticas"
+Fuentes_menu "-----------------------------------"
 Fuentes_titulo "Menú"
-Fuentes_menu "
-  1) Programar recogida de prácticas
-  2) Empaquetar prácticas de una asignatura
-  3) Ver tamaño y fecha del fichero de una asignatura
-  4) Enviar backup de prácticas a un servidor remoto
-  5) Finalizar programa
-
-"
-while [ Seguir = "NO" ]
+Fuentes_menu "  1) Programar recogida de prácticas"
+Fuentes_menu "  2) Empaquetar prácticas de una asignatura"
+Fuentes_menu "  3) Ver tamaño y fecha del fichero de una asignatura"
+Fuentes_menu "  4) Enviar backup de prácticas a un servidor remoto"
+Fuentes_menu "  5) Finalizar programa"
+while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "  Opción: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion
-	Fuentes_respuesta_color_end
-	if [ Controles_opcion_menu_correcto $Seleccion ] #comprueba si la selección está entre 1 y 5.
+	Seleccion=$(Fuentes_pregunta "  Opción: ")
+	if Controles_opcion_menu_correcto $Seleccion #comprueba si la selección está entre 1 y 5.
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion # Hace echo -ne "\e[1A\r" para volver a la línea anterior con esa vacía 
 					  # y borrar esa linea \r\033[0K.
 	fi
 done
+
+
+
 "opcion$Seleccion"
+Seguir="NO"
+Seleccion=""
+menuInicial
+
 }
 function opcion1
 {
@@ -53,24 +51,16 @@ Seleccion=""
 Fuentes_titulo "Menú 1 – Programar recogida de prácticas"
 echo ""
 
-Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: "
-Fuentes_respuesta_color_start
-read Seleccion
-Log_info $Seleccion
-Fuentes_respuesta_color_end
+Seleccion=$(Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: ")
 
 Asignatura=$Seleccion
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Hora a la que debe realizarse la recogida: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion	
-	Fuentes_respuesta_color_end
-	if [ Controles_hora_correcta $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Hora a la que debe realizarse la recogida: ")
+	if Controles_hora_correcta $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -78,18 +68,14 @@ do
 done
 
 Hora=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Ruta absoluta con las cuentas de los alumnos: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion
-	Fuentes_respuesta_color_end
-	if [ Controles_directorio_correcto $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Ruta absoluta con las cuentas de los alumnos: ")
+	if  Controles_directorio_correcto $Seleccion 
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -97,18 +83,14 @@ do
 done
 
 RutaCuenta=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Ruta absoluta para almacenar prácticas: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion
-	Fuentes_respuesta_color_end
-	if [ Controles_directorio_correcto $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Ruta absoluta para almacenar prácticas: ")
+	if Controles_directorio_correcto $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada		
 		#Fuentes_reescribir_opcion
@@ -116,23 +98,17 @@ do
 done
 
 RutaAlmacenar=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
-Fuentes_menu "
-Se va a programar la recogida de las prácticas de $Asignatura a las
-$Hora. Origen: $RutaCuenta. Destino: $RutaAlmacenar
-"
+Fuentes_menu "Se va a programar la recogida de las prácticas de $Asignatura a las"
+Fuentes_menu "$Hora. Origen: $RutaCuenta. Destino: $RutaAlmacenar"
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "¿Está de acuerdo (s/n)? "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion
-	Fuentes_respuesta_color_end
-	if [ Controles_confiramcion_correcta $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "¿Está de acuerdo (s/n)? ")
+	if Controles_confiramcion_correcta $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -156,11 +132,11 @@ dayEv=$(date +%x | cut -d'/' -f1)
 MoonEv=$(date +%x | cut -d'/' -f2)
 WeekDayev=$(date +%u)
 
-cronFile="CronTabfile$(data +%X)" #file with time in the name, to don't touch user's files..
+cronFile="CronTabfile$(date +%X)" #file with time in the name, to don't touch user's files..
 
 touch $cronFile
-echo "$(crontab -l)" >> $cronFile #Previous configurations.
-echo "$minEv $hourEv $dayEv $MoonEv $WeekDayev $(dirname $0)/Modulos/Recogida.sh $RutaCuenta $RutaAlmacenar" >> $cronFile #Current configurations add to file.
+echo "$(crontab -l)" >> $cronFile  2> /dev/null #Previous configurations.
+echo "$minEv $hourEv $dayEv $MoonEv $WeekDayev $(readlink -m $(dirname $0)/Modulos/Recogida.sh) $RutaCuenta $RutaAlmacenar" >> $cronFile #Current configurations add to file.
 crontab $cronFile #Set cron tab job.
 rm $cronFile #Deleting the file, in order to not make rabish here.
 
@@ -176,24 +152,16 @@ Seleccion=""
 Fuentes_titulo "Menú 2 – Empaquetar prácticas de la asignatura"
 echo ""
 
-Fuentes_pregunta "Asignatura cuyas prácticas se desea empaquetar: "
-Fuentes_respuesta_color_start
-read Seleccion
-Log_info $Seleccion
-Fuentes_respuesta_color_end
+Seleccion=$(Fuentes_pregunta "Asignatura cuyas prácticas se desea empaquetar: ")
 
 Asignatura=$Seleccion
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Ruta absoluta para almacenar prácticas: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion	
-	Fuentes_respuesta_color_end
-	if [ Controles_directorio_correcto $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Ruta absoluta del directorio de prácticas: ")
+	if Controles_directorio_correcto $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada		
 		#Fuentes_reescribir_opcion
@@ -201,23 +169,17 @@ do
 done
 
 RutaPracticas=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
-Fuentes_menu "
-Se van a empaquetar las prácticas de la asignatura ASO presentes
-en el directorio $RutaPracticas.
-"
+Fuentes_menu "Se van a empaquetar las prácticas de la asignatura ASO presentes"
+Fuentes_menu "en el directorio $RutaPracticas."
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "¿Está de acuerdo (s/n)? "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion	
-	Fuentes_respuesta_color_end
-	if [ Controles_confiramcion_correcta $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "¿Está de acuerdo (s/n)? ")
+	if Controles_confiramcion_correcta $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -245,24 +207,16 @@ Seleccion=""
 Fuentes_titulo "Menú 3 – Obtener tamaño y fecha del fichero"
 echo ""
 
-Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: "
-Fuentes_respuesta_color_start
-read Seleccion
-Log_info $Seleccion
-Fuentes_respuesta_color_end
+Seleccion=$(Fuentes_pregunta "Asignatura cuyas prácticas desea recoger: ")
 
 Asignatura=$Seleccion
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Ruta absoluta de la asignatura: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion	
-	Fuentes_respuesta_color_end
-	if [ Controles_directorio_correcto $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Ruta absoluta de la asignatura: ")
+	if Controles_directorio_correcto $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -270,13 +224,13 @@ do
 done
 
 RutaPracticas=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
 SalidaInfo=$($(dirname $0)/Modulos/InfoPaquete.sh "$RutaPracticas")
 
-if [ $SalidaInfo != "Nada" ]
+if [ "$SalidaInfo" != "Nada" ]
 then
-	Fuentes_menu "$SalidaInfo"
+	Fuentes_menu "El fichero generado es $(echo $SalidaInfo | cut -d':' -f1) y ocupa $(echo $SalidaInfo | cut -d':' -f2) bytes." 
 else
 	Warn_gen "No hay paquetes en éste direcotio."	
 fi
@@ -289,24 +243,16 @@ Seleccion=""
 Fuentes_titulo "Menú 4 – Enviar backup al servidor"
 echo ""
 
-Fuentes_pregunta "Asignatura cuyo backup queremos enviar: "
-Fuentes_respuesta_color_start
-read Seleccion
-Log_info $Seleccion
-Fuentes_respuesta_color_end
+Seleccion=$(Fuentes_pregunta "Asignatura cuyo backup queremos enviar: ")
 
 Asignatura=$Seleccion
 
 while [ $Seguir = "NO" ]
 do
-	Fuentes_pregunta "Ruta absoluta de la asignatura: "
-	Fuentes_respuesta_color_start
-	read Seleccion
-	Log_info $Seleccion	
-	Fuentes_respuesta_color_end
-	if [ Controles_directorio_correcto $Seleccion ]
+	Seleccion=$(Fuentes_pregunta "Ruta absoluta de la asignatura: ")
+	if Controles_directorio_correcto $Seleccion
         then
-		Seguir= "SI"
+		Seguir="SI"
 	else
 		Error_entrada
 		#Fuentes_reescribir_opcion
@@ -314,14 +260,10 @@ do
 done
 
 RutaPracticas=$Seleccion
-Seguir= "NO"
+Seguir="NO"
 
-Fuentes_pregunta "Servidor al que desea enviar backup (dominio por omisión:
-eui.upm.es): "
-Fuentes_respuesta_color_start
-read Seleccion
-Log_info $Seleccion
-Fuentes_respuesta_color_end
+Seleccion=$(Fuentes_pregunta "Servidor al que desea enviar backup (dominio por omisión:\n
+eui.upm.es): ")
 
 DireccionServidor=$Seleccion
 
@@ -341,4 +283,3 @@ exit 0
 #Code:
 
 menuInicial
-

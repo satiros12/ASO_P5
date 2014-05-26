@@ -38,9 +38,11 @@ function Fuentes_menu
 }
 function Fuentes_pregunta
 {
-	output=$(msjC 4 0 "$1\n")
-	Log_info $output
-	echo $output
+	#colorL 4
+	read -p "$1" entrada
+	Log_info "$1 $entrada"
+	#colorL 0
+	echo $entrada
 }
 function Fuentes_respuesta_color_start
 {

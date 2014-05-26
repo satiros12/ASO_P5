@@ -1,4 +1,5 @@
 #!/bin/bash
-nameOfTarball="$2-$(date +%x | tr -d '\')-$(date +%X | tr -d ':')"
+tiempo="$(date +%X | cut -d':' -f1)$(date +%X | cut -d':' -f2)"
+nameOfTarball="$2-$(date +%x | tr -d '/')-$tiempo"
 cd $1
-tar -czf "$nameOfTarball.tgz" "./*"
+tar -czf "$nameOfTarball.tgz" "."
